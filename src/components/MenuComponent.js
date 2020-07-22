@@ -21,7 +21,7 @@ import { Card, CardImg, CardImgOverlay,  CardTitle } from "reactstrap";
         const menu = props.dishes.map( (dish) => {
             return(
                 <div key={dish.id} className="col-12 col-md-5 m-1">
-                  <RenderComponent dish={dish} onClick={props.onClick}/>
+                  <RenderComponent dish={dish} />
                 </div>
             );
         });
