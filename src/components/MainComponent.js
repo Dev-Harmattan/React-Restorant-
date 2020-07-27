@@ -26,6 +26,9 @@ class Main extends Component {
     
   }
 
+
+  handleToggle() {}
+
   
 
   render() {
