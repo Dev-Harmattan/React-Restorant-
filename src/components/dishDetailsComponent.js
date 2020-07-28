@@ -58,10 +58,8 @@ const maxLength = (len) => (val) => !(val) || (val.length <= len);
         }
 
         const handleSubmit = (values) => {
-        
-            console.log("Current state is:"+ JSON.stringify(values))
-            alert("Current state is:"+ JSON.stringify(values))
             handleToggle(); 
+            props.addComment(props.dishId, values.rating, values.author, values.comment);
         }
 
         return(
@@ -149,8 +147,8 @@ const maxLength = (len) => (val) => !(val) || (val.length <= len);
                         <HandleRender dish={props.dish} />
                     </div>
                     <div className="col-12 col-md-5 m-1">
-                        <RenderComments comments={props.comments} />
-                        <CommentForm/>
+                        <RenderComments comments={props.comments} addComment={props.addComment} dishId={props.dish.id} />
+                        <CommentForm addComment={props.addComment} dishId={props.dish.id}/>
                     </div>
                 </div>
             </div>
