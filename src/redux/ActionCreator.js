@@ -1,5 +1,6 @@
 import * as ActionType from "./ActionTypes";
 import { DISHES } from "../sharedFile/dishes";
+import {baseUrl} from "../sharedFile/baseUrl"
 
 
 export const addComment = (dishId, rating, author, comment) => ({
@@ -12,13 +13,13 @@ export const addComment = (dishId, rating, author, comment) => ({
     }
 });
 
-//using thunk to return function to perfrom mutiple dispatch
+//dishes action declearation using thunk and fetch
 export const fetchDishes = () => (dispatch) => {
     dispatch(dishesLoading(true));
 
-    setTimeout(() => {
-        dispatch(addDishes(DISHES));
-    }, 1000);
+   return fetch(baseUrl + "dishes")
+    .then(response => response.json())
+    .then(dishes => dispatch(addDishes(dishes)));
 }
 
 export const dishesLoading = () => ({
@@ -35,3 +36,53 @@ export const addDishes = (dishes) => ({
     type: ActionType.ADD_DISHES,
     payload: dishes
 });
+
+
+//comments action declearation using thunk and fetch
+export const fetchComments = () => (dispatch) => {
+
+   return fetch(baseUrl + "comments")
+    .then(response => response.json())
+    .then(comments => dispatch(addComments(comments)));
+}
+
+export const commentsFailed = (errmess) => ({
+    type: ActionType.COMMENTS_FAILED,
+    payload: errmess
+});
+
+export const addComments = (comments) => ({
+    type: ActionType.ADD_COMMENTS,
+    payload: comments
+});
+
+
+
+//promotions action declearation using thunk and fetch
+export const fetchPromos = () => (dispatch) => {
+
+    dispatch(promosLoading(true));
+
+    return fetch(baseUrl + "promotions")
+     .then(response => response.json())
+     .then(promos => dispatch(addPromos(promos)));
+}
+
+export const promosLoading = () => ({
+    type: ActionType.PROMOS_LOADING
+});
+ 
+export const promosFailed = (errmess) => ({
+    type: ActionType.PROMOS_FAILED,
+    payload: errmess
+});
+ 
+export const addPromos = (promos) => ({
+    type: ActionType.ADD_PROMOS,
+    payload: promos
+});
+
+
+
+
+
