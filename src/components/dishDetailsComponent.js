@@ -1,9 +1,11 @@
 import React, { useState } from "react";
-import {Card, CardImg, CardText, CardBody, CardTitle, Breadcrumb, BreadcrumbItem,  Button, Modal, ModalHeader, ModalBody,Row, Col, Label} from 'reactstrap';
+import {Card, CardImg, CardText, CardBody, CardTitle, Breadcrumb, 
+    BreadcrumbItem,  Button, Modal, ModalHeader, ModalBody,Row, Col, Label} from 'reactstrap';
 import { Control, LocalForm, Errors } from 'react-redux-form';
 import {Link} from "react-router-dom";
 import {Loading} from "./LoadingComponnt";
 import { baseUrl } from "../sharedFile/baseUrl";
+import {Fade, Stagger} from "react-animation-components";
 
 
 const required = (val) => val && val.length;
@@ -15,12 +17,18 @@ const maxLength = (len) => (val) => !(val) || (val.length <= len);
         if(dish != null) {
             return(
                 <Card>
-                  <CardImg width="100%" src={baseUrl + dish.image} alt={dish.name}/>  
-                    <CardBody>
-                        <CardTitle>{dish.name}</CardTitle>
-                        <CardText>{dish.description}</CardText>
-                    </CardBody>
-                </Card>
+                        <CardImg width="100%" src={baseUrl + dish.image} alt={dish.name}/>  
+                        <CardBody>
+                            <CardTitle>{dish.name}</CardTitle>
+                            <CardText>{dish.description}</CardText>
+                        </CardBody>
+                    </Card>
+                /* <FadeTransform In
+                    transformProps= {{
+                        exitTransform: "scale(0.5) translate(-50%)"
+                    }}>
+                    
+                </FadeTransform> */
             );
         }else {
             return(
@@ -36,16 +44,18 @@ const maxLength = (len) => (val) => !(val) || (val.length <= len);
         if(comments != null){
             const comment = comments.map( (comment) => {
                 return(
-                    <div key={comment.id}>
-                        <ul   className="list-unstyled">
-                            <li>--{comment.comment}</li>
-                            <li>--{comment.author}. {new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'short', day: '2-digit'}).format(new Date(Date.parse(comment.date)))}</li>
-                        </ul>
-                    </div>
+                    <Fade in>
+                        <div key={comment.id}>
+                            <ul   className="list-unstyled">
+                                <li>--{comment.comment}</li>
+                                <li>--{comment.author}. {new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'short', day: '2-digit'}).format(new Date(Date.parse(comment.date)))}</li>
+                            </ul>
+                        </div>
+                    </Fade>
                 );
             })
 
-            return comment;
+            return <Stagger in>{comment}</Stagger>;
         }else {
             return <div></div>
         }

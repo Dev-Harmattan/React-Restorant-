@@ -155,5 +155,91 @@ export const addPromos = (promos) => ({
 
 
 
+//creating action for Leaders using thunk and fetch from server
+export const fetchLeaders = () => (dispatch) => {
+    dispatch(leadersLoading(true));
 
+    return fetch(baseUrl + "leaders")
+    .then(response => {
+        if(response.ok){
+            return response
+        }else{
+            var error = new Error("Error " + response.status + ": " + response.statusText);
+            error.response = response;
+            throw error;
+        }
+    },
+    error => {
+        var errorMess = new Error(error.message);
+        throw errorMess;
+    })
+    .then(response => response.json())
+    .then(leaders => dispatch(addLeaders(leaders)))
+    .catch(error => dispatch(leadersFailed(error.message)));
+}
 
+export const leadersLoading = () => ({
+    type: ActionType.LEADERS_LOADING
+});
+
+export const addLeaders = (leaders) => ({
+    type: ActionType.ADD_LEADERS,
+    payload: leaders
+});
+
+export const leadersFailed = (errMess) => ({
+    type: ActionType.LEADERS_FAILED,
+    payload: errMess
+});
+
+//action creator for feedback using thunk and fetch ap1
+export const postFeedback =  (firstname, lastname, telnum, email, agree, contactType, message) => (dispatch) => {
+
+    const newFeedback = {
+        firstname: firstname,
+        lastname: lastname,
+        telnum: telnum,
+        email: email,
+        agree: agree,
+        contactType: contactType,
+        message: message
+    };
+
+    return fetch(baseUrl + "feedback", {
+        method: "POST",
+        body: JSON.stringify(newFeedback),
+        headers: {
+            "Content-Type": "application/json"
+        },
+        credentials: "same-origin"
+    })
+    .then(response => {
+        if(response.ok) {
+            return response;
+        } else {
+            var error = new Error("ERROR " + response.status + ": " + response.statusText);
+            error.response = response;
+            throw error;
+        }
+    }, 
+    error => {
+        var errorMess = new Error(error.message);
+        throw errorMess;
+    })
+    .then(response => response.json())
+    .then(response => dispatch(addFeedback(response)))
+    .then(error => dispatch(feedbackFailed(error.message)))
+}
+
+export const addFeedback = (feedback) => ({
+    type: ActionType.ADD_FEEDBACK,
+    payload: feedback,
+    message: (feedback) => {
+        alert(feedback)
+    }
+});
+
+export const feedbackFailed = (errMess) => ({
+    type: ActionType.FEEDBACK_FAILED,
+    payload: errMess
+});
